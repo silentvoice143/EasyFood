@@ -7,17 +7,34 @@ import CustomerRoute from './customerRoute';
 import VendorRoute from './vendorRoute';
 
 const MainRoute = () => {
+  const linking = {
+    prefixes: ['https://easyfood.com'], // List of URI schemes your app should handle
+    config: {
+      screens: {
+        customerRoute: 'username1', // Maps 'yourapp://target' to the TargetPage screen
+      },
+    },
+  };
   const Stack = createNativeStackNavigator();
   return (
-    <NavigationContainer>
+    <NavigationContainer linking={linking}>
       <Stack.Navigator>
         <Stack.Screen
           options={{headerShown: false}}
           name="Home"
           component={Home}
         />
-        <Stack.Screen name="customerRoute" component={CustomerRoute} />
-        <Stack.Screen name="vendorRoute" component={VendorRoute} />
+
+        <Stack.Screen
+          options={{headerShown: false}}
+          name="customerRoute"
+          component={CustomerRoute}
+        />
+        <Stack.Screen
+          options={{headerShown: false}}
+          name="vendorRoute"
+          component={VendorRoute}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

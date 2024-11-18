@@ -13,6 +13,7 @@ type ButtonProps = {
   wfull?: boolean;
   txtStyle?: any;
   corner?: number;
+  hfixed?: boolean;
 };
 
 const Button = ({
@@ -26,6 +27,7 @@ const Button = ({
   wfull = false,
   txtStyle = textStyle.fs_12_500,
   corner = 8,
+  hfixed = false,
 }: ButtonProps) => {
   return (
     <TouchableOpacity

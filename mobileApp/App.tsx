@@ -8,6 +8,7 @@
 import React from 'react';
 
 import {
+  KeyboardAvoidingView,
   SafeAreaView,
   ScrollView,
   StatusBar,
@@ -22,8 +23,10 @@ function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
 
   return (
-    <SafeAreaView style={styles.container}>
-      <MainRoute />
+    <SafeAreaView>
+      <KeyboardAvoidingView style={styles.container}>
+        <MainRoute />
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
