@@ -1,7 +1,8 @@
 # OSX
 #
-.env
+
 .DS_Store
+.env
 
 # Xcode
 #
