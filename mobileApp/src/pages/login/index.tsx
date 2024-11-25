@@ -4,6 +4,7 @@ import {
   TextInput,
   TouchableHighlight,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import React, {useState, version} from 'react';
 import tw from 'twrnc';
@@ -13,6 +14,8 @@ import Button from '../../components/button';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList, VendorStackParamList} from '../../types';
+import {useAppDispatch} from '../../hooks/reduxHooks';
+import {login} from '../../store/reducer/auth';
 
 type LoginScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -21,18 +24,31 @@ type LoginScreenNavigationProp = NativeStackNavigationProp<
 
 const Login = ({}) => {
   const navigation = useNavigation<LoginScreenNavigationProp>();
+  const dispatch = useAppDispatch();
   const [isFocus, setIsFocus] = useState({
     email: false,
     password: false,
   });
   const [userData, setUserData] = useState<{email: string; password: string}>({
-    email: 'user',
-    password: 'user',
+    email: 'wajilel682@kazvi.com',
+    password: 'password123',
   });
 
-  const onLogin = () => {
-    if (userData.email === 'user' && userData.password === 'user') {
-      navigation.navigate('vendorRoute', {screen: 'Screen'});
+  const onLogin = async () => {
+    if (!userData.email && !userData.password) {
+      Alert.alert('Please fill all feild');
+    }
+
+    try {
+      console.log(userData);
+      const {payload}: any = await dispatch(login(userData));
+      if (payload.status === 200) {
+        console.log(payload.data.message);
+      } else {
+        Alert.alert('something is wrong');
+      }
+    } catch (err: any) {
+      Alert.alert('something is wrong');
     }
   };
   return (

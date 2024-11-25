@@ -18,16 +18,19 @@ import {
   View,
 } from 'react-native';
 import MainRoute from './src/routes/mainRoute';
-
+import {Provider} from 'react-redux';
+import store from './src/store';
+import {injectStore} from './src/apis/createInstance';
+injectStore(store);
 function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-
   return (
-    <SafeAreaView>
-      <KeyboardAvoidingView style={styles.container}>
-        <MainRoute />
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+    <Provider store={store}>
+      <SafeAreaView>
+        <KeyboardAvoidingView style={styles.container}>
+          <MainRoute />
+        </KeyboardAvoidingView>
+      </SafeAreaView>
+    </Provider>
   );
 }
 
