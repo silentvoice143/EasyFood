@@ -1,6 +1,6 @@
 import { Server } from "socket.io";
 
-export const registerSocketHandlers = (io: Server) => {
+export const registerSocketHandlers = (io) => {
   io.on("connection", (socket) => {
     console.log("a user connected:", socket.id);
 

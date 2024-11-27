@@ -10,7 +10,8 @@ const defaultTimeout = 40000;
 
 const handleRequest = (config: any) => {
   const accessToken = injected_store.getState().auth.token;
-  const addToken = false;
+  const noTokenEndPoint = ['/api/auth/login'];
+  const addToken = noTokenEndPoint.includes(config.url);
 
   if (addToken) {
     return {
@@ -33,31 +34,69 @@ const handleRequest = (config: any) => {
 };
 
 const handleResponse = (response: any) => {
-  // Handle successful responses here
-  console.log('Response:', response);
+  const {status, data} = response;
+
+  switch (status) {
+    case 200:
+      console.log('Success:', data);
+      break;
+    case 201:
+      console.log('Created:', data);
+      break;
+    case 204:
+      console.log('No Content');
+      break;
+    default:
+      console.warn('Unhandled status code:', status);
+  }
+
   return response;
 };
 
 const handleError = (error: any) => {
-  // Handle errors here
-  console.error('Error:', error);
-  return Promise.reject(error);
+  if (error.response) {
+    const {status, data} = error.response;
+    switch (status) {
+      case 400:
+        // console.error('Bad Request:', data);
+        break;
+      case 401:
+        // console.error('Unauthorized:', data);
+        break;
+      case 403:
+        console.error('Forbidden:', data);
+        break;
+      case 404:
+        console.error('Not Found:', data);
+        break;
+      case 500:
+        console.error('Internal Server Error:', data);
+        break;
+      default:
+        console.error('Unhandled error status code:', status, data);
+    }
+  } else if (error.request) {
+    console.error('Network error:', error.message);
+  } else {
+    console.error('Error:', error.message);
+  }
+
+  return error;
 };
 
-const createApiInstance = (baseURL: string, name: string = '') => {
-  const api = axios.create({
-    baseURL,
-    timeout: defaultTimeout,
-  });
-
+const createApiInstance = (baseURL: string, name = '') => {
   if (!baseURL) {
     throw new Error(
       `${name} baseURL not set during build. Please, set baseURL`,
     );
   }
 
-  api.interceptors.request.use(handleRequest);
+  const api = axios.create({
+    baseURL,
+    timeout: defaultTimeout,
+  });
 
+  api.interceptors.request.use(handleRequest);
   api.interceptors.response.use(handleResponse, handleError);
 
   return {

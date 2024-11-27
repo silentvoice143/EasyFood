@@ -1,10 +1,9 @@
-import User from "../models/userModels";
+import User from "../models/userModels.js";
 import bcrypt from "bcrypt";
 import crypto from "crypto";
-import { sendEmail } from "../utils/sendEmail";
-import { Request, Response } from "express";
+import { sendEmail } from "../utils/sendEmail.js";
 
-export const addUser: any = async (req: Request, res: Response) => {
+export const addUser = async (req, res) => {
   try {
     const { email, password } = req.body;
     console.log("step 1 hit", email, password);
@@ -12,7 +11,18 @@ export const addUser: any = async (req: Request, res: Response) => {
     // Check if user already exists
     let user = await User.findOne({ email });
     if (user) {
-      return res.status(400).send("User already exists");
+      if (user.isVerified) {
+        return res.status(400).send({ message: "User already exists" });
+      } else {
+        return res.status(200).send({
+          message: "User already exists",
+          data: {
+            userId: user._id,
+            email: user.email,
+            step: user.signupStep,
+          },
+        });
+      }
     }
 
     // Hash the password
@@ -33,13 +43,14 @@ export const addUser: any = async (req: Request, res: Response) => {
       message: "Step 1 completed",
       userId: user._id,
       email: user.email,
+      step: user.signupStep,
     });
   } catch (err) {
     res.status(500).send("Server error" + err);
   }
 };
 
-export const signupStep2: any = async (req: Request, res: Response) => {
+export const signupStep2 = async (req, res) => {
   try {
     const { userId, businessName, address } = req.body;
 
@@ -62,6 +73,7 @@ export const signupStep2: any = async (req: Request, res: Response) => {
       message: "Step 2 completed",
       userId: user._id,
       email: user.email,
+      step: user.signupStep,
     });
   } catch (err) {
     res.status(500).send("Server error");
@@ -69,15 +81,16 @@ export const signupStep2: any = async (req: Request, res: Response) => {
 };
 
 // Step 1: Generate OTP and send to email
-export const sendOtpEmail: any = async (req: Request, res: Response) => {
-  const { userid } = req.body;
+export const sendOtpEmail = async (req, res) => {
+  const { userId } = req.body;
+  console.log(userId);
 
   try {
     // Generate a 6-digit OTP
     const otp = crypto.randomInt(1000, 9999).toString();
 
     // Find user by email
-    const user = await User.findOne({ _id: userid });
+    const user = await User.findOne({ _id: userId });
     if (!user) {
       return res.status(400).send("User not found");
     }
@@ -98,8 +111,9 @@ export const sendOtpEmail: any = async (req: Request, res: Response) => {
 };
 
 // Step 2: Verify OTP
-export const verifyOtp: any = async (req: Request, res: Response) => {
+export const verifyOtp = async (req, res) => {
   const { userid, otp } = req.body;
+  console.log(otp, userid);
 
   try {
     // Find user by email
@@ -113,7 +127,10 @@ export const verifyOtp: any = async (req: Request, res: Response) => {
       user.isVerified = true;
       user.otp = undefined; // Clear OTP after successful verification
       await user.save();
-      res.status(200).send("Email verified successfully");
+      res.status(200).send({
+        message: "Email verified successfully",
+        data: { token: user.generateAuthToken(), email: user.email },
+      });
     } else {
       res.status(400).send("Invalid OTP");
     }
@@ -122,7 +139,7 @@ export const verifyOtp: any = async (req: Request, res: Response) => {
   }
 };
 
-export const loginUser: any = async (req: Request, res: Response) => {
+export const loginUser = async (req, res) => {
   const { email, password } = req.body;
 
   try {

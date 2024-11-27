@@ -21,6 +21,8 @@ import MainRoute from './src/routes/mainRoute';
 import {Provider} from 'react-redux';
 import store from './src/store';
 import {injectStore} from './src/apis/createInstance';
+import {useAppSelector} from './src/hooks/reduxHooks';
+import MainLoader from './src/components/mainLoader';
 injectStore(store);
 function App(): React.JSX.Element {
   return (

@@ -1,7 +1,7 @@
-import app from "./app";
+import app from "./src/app.js";
 import { createServer } from "http";
 import { Server } from "socket.io";
-import { registerSocketHandlers } from "./socket";
+import { registerSocketHandlers } from "./src/socket.js";
 
 const PORT = process.env.PORT || 3000;
 

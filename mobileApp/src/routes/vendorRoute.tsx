@@ -10,6 +10,7 @@ import CrateMenu from '../pages/createMenu';
 import OrderDetail from '../pages/orderDetail';
 import ScreenRenderer from '../components/screenRenderer';
 import Profile from '../pages/profile';
+import ProtectedRoute from './ProtectedRoute';
 const Vendor = () => {
   return <Text>hello</Text>;
 };
@@ -39,26 +40,16 @@ const VendorRoute = () => {
         name="profile"
         component={Profile}
       />
-      {/* <Stack.Screen
-        options={{headerShown: false}}
-        name="dashboard"
-        component={DashBoard}
-      />
-      <Stack.Screen
-        options={{headerShown: false}}
-        name="receivedOrders"
-        component={OrderReceived}
-      /> */}
       <Stack.Screen
         options={{headerShown: false}}
         name="orderdetail"
         component={OrderDetail}
       />
-      <Stack.Screen
-        options={{headerShown: false}}
-        name="Screen"
-        component={ScreenRenderer}
-      />
+      <Stack.Screen options={{headerShown: false}} name="Screen">
+        {(props: any) => (
+          <ProtectedRoute component={ScreenRenderer} {...props} />
+        )}
+      </Stack.Screen>
     </Stack.Navigator>
   );
 };

@@ -1,10 +1,21 @@
 import {View, Text, Image} from 'react-native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import tw from 'twrnc';
 import {textStyle} from '../../constants/textStyle';
 import Button from '../../components/button';
+import {useAppSelector} from '../../hooks/reduxHooks';
 
 const Home = ({navigation}) => {
+  const isAuthenticated = useAppSelector(state => state.auth.token);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigation.reset({
+        index: 0,
+        routes: [{name: 'vendorRoute', state: {routes: [{name: 'Screen'}]}}],
+      });
+    }
+  }, [isAuthenticated, navigation]);
   return (
     <View style={[tw`flex-1 bg-white justify-center px-[10%] gap-5`]}>
       <Text

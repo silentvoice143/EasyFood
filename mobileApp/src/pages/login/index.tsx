@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   Alert,
 } from 'react-native';
-import React, {useState, version} from 'react';
+import React, {useEffect, useState, version} from 'react';
 import tw from 'twrnc';
 import {textStyle} from '../../constants/textStyle';
 import {Colors} from '../../constants/color';
@@ -14,8 +14,9 @@ import Button from '../../components/button';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList, VendorStackParamList} from '../../types';
-import {useAppDispatch} from '../../hooks/reduxHooks';
-import {login} from '../../store/reducer/auth';
+import {useAppDispatch, useAppSelector} from '../../hooks/reduxHooks';
+import {login, setLoading} from '../../store/reducer/auth';
+import MainLoader from '../../components/mainLoader';
 
 type LoginScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -24,6 +25,8 @@ type LoginScreenNavigationProp = NativeStackNavigationProp<
 
 const Login = ({}) => {
   const navigation = useNavigation<LoginScreenNavigationProp>();
+  const isAuthenticated = useAppSelector(state => state.auth.token);
+
   const dispatch = useAppDispatch();
   const [isFocus, setIsFocus] = useState({
     email: false,
@@ -40,17 +43,42 @@ const Login = ({}) => {
     }
 
     try {
+      dispatch(setLoading());
       console.log(userData);
       const {payload}: any = await dispatch(login(userData));
       if (payload.status === 200) {
-        console.log(payload.data.message);
+        navigation.reset({
+          index: 0, // Set the index to 0 to start at the first route in the stack
+          routes: [
+            {
+              name: 'vendorRoute', // The name of your nested navigator
+              state: {
+                routes: [{name: 'Screen'}], // The screen inside 'vendorRoute' you want to navigate to
+              },
+            },
+          ],
+        });
       } else {
         Alert.alert('something is wrong');
       }
     } catch (err: any) {
       Alert.alert('something is wrong');
+    } finally {
+      setTimeout(() => {
+        dispatch(setLoading());
+      }, 2000);
     }
   };
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigation.reset({
+        index: 0,
+        routes: [{name: 'vendorRoute', state: {routes: [{name: 'Screen'}]}}],
+      });
+    }
+  }, [isAuthenticated, navigation]);
+
   return (
     <View style={tw`flex-1 bg-white justify-center px-[10%]`}>
       <Text

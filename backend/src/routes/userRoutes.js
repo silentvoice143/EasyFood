@@ -5,7 +5,7 @@ import {
   verifyOtp,
   sendOtpEmail,
   loginUser,
-} from "../controllers/userControllers";
+} from "../controllers/userControllers.js";
 
 const router = Router();
 

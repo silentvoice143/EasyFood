@@ -16,6 +16,8 @@ import Navbar1 from './Navbar1';
 import {useRoute, RouteProp, useNavigation} from '@react-navigation/native';
 import {VendorStackParamList} from '../types';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import MainLoader from './mainLoader';
+import {useAppDispatch, useAppSelector} from '../hooks/reduxHooks';
 
 type VendorScreenRouteProp = RouteProp<VendorStackParamList, 'Screen'>;
 type ScreenNavigationProp = NativeStackNavigationProp<

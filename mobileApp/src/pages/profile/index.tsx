@@ -1,4 +1,11 @@
-import {View, Text, TouchableOpacity, Image, Pressable} from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  Pressable,
+  Alert,
+} from 'react-native';
 import React from 'react';
 import BackIcon from '../../assets/svg/backIcon';
 import tw from 'twrnc';
@@ -6,8 +13,21 @@ import {Colors} from '../../constants/color';
 import {textStyle} from '../../constants/textStyle';
 import ProfileIcon from '../../assets/svg/profile';
 import AddressIcon from '../../assets/svg/addressIcon';
+import {useAppDispatch} from '../../hooks/reduxHooks';
+import {
+  setInitialState as setAuthInitialState,
+  setLoading,
+} from '../../store/reducer/auth';
 
 const Profile = ({navigation}: any) => {
+  const dispatch = useAppDispatch();
+  const handleLogout = () => {
+    try {
+      dispatch(setAuthInitialState());
+    } catch (err) {
+      Alert.alert('Error', 'Something Wrong');
+    }
+  };
   return (
     <View style={tw`bg-[${Colors.secondaryBG}] flex-1`}>
       <View style={tw`px-4 py-6 `}>
@@ -73,7 +93,7 @@ const Profile = ({navigation}: any) => {
           <TouchableOpacity style={tw`px-4 py-2`}>
             <Text style={[textStyle.fs_20_400]}>Settings</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={tw`px-4 py-2`}>
+          <TouchableOpacity style={tw`px-4 py-2`} onPress={handleLogout}>
             <Text style={[textStyle.fs_20_400]}>Logout</Text>
           </TouchableOpacity>
         </View>
