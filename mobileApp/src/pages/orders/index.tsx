@@ -19,7 +19,7 @@ const OrderReceived = ({navigation}: any) => {
       style={{
         flex: 1,
         backgroundColor: Colors.white,
-        paddingHorizontal: 24,
+        paddingHorizontal: 16,
         paddingVertical: 20,
       }}>
       <View style={tw`mb-4`}>
@@ -35,7 +35,6 @@ const OrderReceived = ({navigation}: any) => {
           backgroundColor: Colors.white,
           gap: 16,
           flexDirection: 'column',
-          paddingVertical: 10,
         }}>
         <TouchableOpacity
           onPress={() =>

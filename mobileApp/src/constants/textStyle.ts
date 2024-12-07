@@ -11,6 +11,11 @@ export const textStyle = StyleSheet.create({
     fontSize: 48,
     fontWeight: '700',
   },
+  fs_36_400: {
+    fontFamily: 'Roboto-Bold',
+    fontSize: 36,
+    fontWeight: '400',
+  },
   fs_20_700: {
     fontFamily: 'Roboto-Bold',
     fontSize: 20,
@@ -44,6 +49,11 @@ export const textStyle = StyleSheet.create({
   fs_20_400: {
     fontFamily: 'Roboto-Regular',
     fontSize: 20,
+    fontWeight: '400',
+  },
+  fs_24_400: {
+    fontFamily: 'Roboto-Regular',
+    fontSize: 24,
     fontWeight: '400',
   },
   fs_16_400: {

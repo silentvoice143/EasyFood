@@ -8,17 +8,22 @@ import SearchIcon from '../assets/svg/searchIcon';
 import Button from './button';
 import CrateMenu from '../pages/createMenu';
 import QRCodeLogoSvg from '../assets/svg/qrcode';
+import {useAppDispatch, useAppSelector} from '../hooks/reduxHooks';
+import {setMenuModaltoggle} from '../store/reducer/menu';
 
 interface headerProps {
   screen?: string;
   setIsOpen?: any;
   navigation?: any;
+  setType?: any;
 }
 
-const Header = ({screen = '', setIsOpen, navigation}: headerProps) => {
+const Header = ({screen = '', setIsOpen, navigation, setType}: headerProps) => {
+  const dispatch = useAppDispatch();
   const [isFocus, setIsFocus] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
-  const isVendor = true;
+  const isVendor = useAppSelector(state => state.role.isVendor);
+
   return (
     <View
       style={tw`flex-row items-center gap-4 px-4 h-14 border-b-[1px] border-[${Colors.lighterGray}] justify-between bg-[${Colors.white}]`}>
@@ -38,7 +43,13 @@ const Header = ({screen = '', setIsOpen, navigation}: headerProps) => {
           <QRCodeLogoSvg />
         </TouchableOpacity>
         {isVendor && screen === 'Menu' && (
-          <Button onClick={() => setIsOpen(true)} text="Add" width={80} />
+          <Button
+            onClick={() => {
+              dispatch(setMenuModaltoggle({type: 'create', id: ''}));
+            }}
+            text="Add"
+            width={80}
+          />
         )}
         {/* {isVendor && screen === 'Profile' && (
           <Button onClick={() => {}} text="Logout" width={80} />

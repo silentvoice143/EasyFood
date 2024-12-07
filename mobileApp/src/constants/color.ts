@@ -16,11 +16,12 @@ export const Colors = {
   lightyellow: '#FFF7B7',
   darkYellow: '#FFE83C',
   lightGreen: '#6EEFAC',
-  darkGreen: '#00A04D',
+  // darkGreen: '#00A04D',
   gray_25: '#B5B5B5',
   lightBorder: '#B5B5B5',
   lightgrayBG: '#DDDDDD',
   grayshadeE9: '#E9E9E9',
   secondaryBG: '#F5F5F5',
   coalBlack: '#1E1E1E',
+  darkGreen: '#007736',
 };

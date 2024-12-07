@@ -3,9 +3,15 @@ import {combineReducers, configureStore} from '@reduxjs/toolkit';
 import {persistReducer, persistStore} from 'redux-persist';
 
 import AuthReducer from './reducer/auth';
+import MenuReducer from './reducer/menu';
+import RoleReducer from './reducer/role';
+import loaderReducer from './reducer/loading';
 
 const rootReducer = combineReducers({
   auth: AuthReducer,
+  loader: loaderReducer,
+  menu: MenuReducer,
+  role: RoleReducer,
 });
 
 const persistConfig = {

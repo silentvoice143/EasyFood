@@ -1,4 +1,4 @@
-import {View, Text, Image, Pressable} from 'react-native';
+import {View, Text, Image, Pressable, Alert} from 'react-native';
 import React, {useState} from 'react';
 import tw from 'twrnc';
 import {textStyle} from '../constants/textStyle';
@@ -6,13 +6,39 @@ import StarIcon from '../assets/svg/starIcon';
 import {Colors} from '../constants/color';
 import Button from './button';
 
-const MenuCard = ({isVendor = false}) => {
+interface MenuCardProps {
+  isVendor?: boolean;
+  imgUrl?: string;
+  name?: string;
+  price?: string;
+  priceOff?: string;
+  category?: string;
+  index?: number;
+  id?: string;
+  deleteCard?: any;
+  editCard?: any;
+}
+
+const MenuCard = ({
+  id = '',
+  index = 0,
+  isVendor = false,
+  imgUrl,
+  name,
+  price,
+  priceOff,
+  category,
+  deleteCard = () => {},
+  editCard = () => {},
+}: MenuCardProps) => {
+  const dispatch = useAppDispatch();
   const [quantity, setQuantity] = useState(0);
+
   return (
-    <View style={tw`bg-[${Colors.white}]`}>
+    <View key={'menuitem' + index} style={tw`bg-[${Colors.white}]`}>
       <View style={tw`flex-row gap-2 px-4 py-5`}>
         <View style={[{height: 140, width: 140}, tw`bg-green-500 rounded-xl`]}>
-          <Image source={require('../assets/img/pizza.png')} />
+          <Image style={tw`w-full h-full rounded-xl`} source={{uri: imgUrl}} />
           {!isVendor && (
             <View
               style={{
@@ -58,7 +84,7 @@ const MenuCard = ({isVendor = false}) => {
           )}
         </View>
         <View style={tw`flex-col flex-1`}>
-          <Text style={textStyle.fs_20_700}>Chicken Butter Masala</Text>
+          <Text style={textStyle.fs_20_700}>{name}</Text>
           <View style={tw`flex-row items-center gap-2 my-2`}>
             <View
               style={tw`flex-row gap-1 bg-[${Colors.lightOrange}] px-2 py-1 rounded-lg`}>
@@ -73,13 +99,27 @@ const MenuCard = ({isVendor = false}) => {
             </Text>
           </View>
           <View style={tw`my-2`}>
-            <Text style={textStyle.fs_16_500}>₹234</Text>
+            <Text style={textStyle.fs_16_500}>₹{price}</Text>
           </View>
           <View style={tw`flex-row items-end justify-end flex-1 gap-2`}>
             {isVendor ? (
               <>
-                <Button hfixed width={80} text="Delete" />
-                <Button hfixed width={80} text="Edit" />
+                <Button
+                  hfixed
+                  width={80}
+                  text="Delete"
+                  onClick={() => {
+                    deleteCard(id);
+                  }}
+                />
+                <Button
+                  hfixed
+                  width={80}
+                  text="Edit"
+                  onClick={() =>
+                    dispatch(setMenuModaltoggle({type: 'edit', id: id}))
+                  }
+                />
               </>
             ) : (
               <Button hfixed width={110} text="Add to Order" />
@@ -110,6 +150,8 @@ const MenuCard = ({isVendor = false}) => {
 import {StyleSheet} from 'react-native';
 import MinusIcon from '../assets/svg/minusIcon';
 import PlusIcon from '../assets/svg/plusIcon';
+import {useAppDispatch} from '../hooks/reduxHooks';
+import {deleteMenuItem, setMenuModaltoggle} from '../store/reducer/menu';
 
 export const styles = StyleSheet.create({
   cardContainer: {

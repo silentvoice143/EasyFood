@@ -6,7 +6,6 @@ const initialState = {
   email: '',
   userId: '',
   token: '',
-  loading: false,
 };
 
 export const AuthSlice = createSlice({
@@ -16,8 +15,8 @@ export const AuthSlice = createSlice({
     setInitialState: () => {
       return initialState;
     },
-    setLoading: prev => {
-      return {...prev, loading: !prev.loading};
+    logout: () => {
+      return initialState;
     },
   },
   extraReducers: (builder: any) => {
@@ -98,7 +97,7 @@ export const AuthSlice = createSlice({
   },
 });
 
-export const {setInitialState, setLoading} = AuthSlice.actions;
+export const {setInitialState, logout} = AuthSlice.actions;
 
 export {login, signupStep1, signupStep2, signupStep3, sendOtp};
 export default AuthSlice.reducer;

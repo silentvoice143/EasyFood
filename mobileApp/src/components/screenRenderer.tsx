@@ -18,6 +18,8 @@ import {VendorStackParamList} from '../types';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import MainLoader from './mainLoader';
 import {useAppDispatch, useAppSelector} from '../hooks/reduxHooks';
+import {injectNavigate} from '../apis/createInstance';
+import {setMenuInitialState, setMenuModaltoggle} from '../store/reducer/menu';
 
 type VendorScreenRouteProp = RouteProp<VendorStackParamList, 'Screen'>;
 type ScreenNavigationProp = NativeStackNavigationProp<
@@ -28,11 +30,14 @@ type ScreenNavigationProp = NativeStackNavigationProp<
 const ScreenRenderer = ({}) => {
   const route = useRoute<VendorScreenRouteProp>();
   const navigation = useNavigation<ScreenNavigationProp>();
+  const dispatch = useAppDispatch();
+  injectNavigate(navigation);
   const isVendor = true;
   const [currentScreen, setCurrentScreen] = useState(
     route.params?.screen ? route?.params?.screen : 'Menu',
   );
-  const [isOpen, setIsOpen] = useState(false);
+  const isOpen = useAppSelector(state => state.menu.isOpen);
+
   const [keyboardVisible, setKeyboardVisible] = useState(false);
 
   useEffect(() => {
@@ -70,11 +75,7 @@ const ScreenRenderer = ({}) => {
     <KeyboardAvoidingView
       style={{flex: 1}}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-      <Header
-        setIsOpen={setIsOpen}
-        screen={currentScreen}
-        navigation={navigation}
-      />
+      <Header screen={currentScreen} navigation={navigation} />
       <View style={{flex: 1}}>{renderScreen()}</View>
       {!keyboardVisible && (
         <Navbar1
@@ -83,7 +84,7 @@ const ScreenRenderer = ({}) => {
           setScreen={setCurrentScreen}
         />
       )}
-      {isOpen && <CrateMenu onClose={() => setIsOpen(false)} />}
+      {isOpen && <CrateMenu onClose={() => dispatch(setMenuInitialState())} />}
     </KeyboardAvoidingView>
   );
 };

@@ -7,7 +7,7 @@ import {Colors} from '../constants/color';
 const OrderCard = () => {
   return (
     <View
-      style={tw`bg-[${Colors.lightShade}] rounded-lg p-4 gap-2 relative border-[1px] border-[${Colors.lightBorder}]/50`}>
+      style={tw`bg-[${Colors.lightShade}]/50 rounded-lg p-4 gap-2 relative border-[1px] border-[${Colors.lightBorder}]/30`}>
       <Text style={[textStyle.fs_20_400, {color: Colors.darkGray}]}>
         Order ID:
       </Text>

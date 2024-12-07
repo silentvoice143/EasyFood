@@ -3,10 +3,13 @@ import React, {useEffect} from 'react';
 import tw from 'twrnc';
 import {textStyle} from '../../constants/textStyle';
 import Button from '../../components/button';
-import {useAppSelector} from '../../hooks/reduxHooks';
+import {useAppDispatch, useAppSelector} from '../../hooks/reduxHooks';
+import {setInitialLoadingState, setLoading} from '../../store/reducer/loading';
+import {setCustomerRole, setVendorRole} from '../../store/reducer/role';
 
 const Home = ({navigation}) => {
   const isAuthenticated = useAppSelector(state => state.auth.token);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -27,13 +30,19 @@ const Home = ({navigation}) => {
         source={require('../../assets/img/homepic.png')}
       />
       <Button
-        onClick={() => navigation.navigate('customerRoute', {screen: 'ScanQr'})}
+        onClick={() => {
+          dispatch(setCustomerRole());
+          navigation.navigate('customerRoute', {screen: 'ScanQr'});
+        }}
         wfull
         txtStyle={textStyle.fs_20_700}
         text={`I'am a Customer`}
       />
       <Button
-        onClick={() => navigation.navigate('vendorRoute', {screen: 'login'})}
+        onClick={() => {
+          dispatch(setVendorRole());
+          navigation.navigate('vendorRoute', {screen: 'login'});
+        }}
         wfull
         txtStyle={textStyle.fs_20_700}
         text={`I'am a Vendor`}

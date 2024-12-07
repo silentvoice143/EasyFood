@@ -14,16 +14,17 @@ import {textStyle} from '../../constants/textStyle';
 import ProfileIcon from '../../assets/svg/profile';
 import AddressIcon from '../../assets/svg/addressIcon';
 import {useAppDispatch} from '../../hooks/reduxHooks';
-import {
-  setInitialState as setAuthInitialState,
-  setLoading,
-} from '../../store/reducer/auth';
+import {setInitialState as setAuthInitialState} from '../../store/reducer/auth';
+import {setInitialLoadingState} from '../../store/reducer/loading';
 
 const Profile = ({navigation}: any) => {
   const dispatch = useAppDispatch();
   const handleLogout = () => {
     try {
       dispatch(setAuthInitialState());
+      setTimeout(() => {
+        dispatch(setInitialLoadingState());
+      }, 2000);
     } catch (err) {
       Alert.alert('Error', 'Something Wrong');
     }

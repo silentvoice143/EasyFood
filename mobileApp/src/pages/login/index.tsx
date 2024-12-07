@@ -15,8 +15,9 @@ import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParamList, VendorStackParamList} from '../../types';
 import {useAppDispatch, useAppSelector} from '../../hooks/reduxHooks';
-import {login, setLoading} from '../../store/reducer/auth';
+import {login} from '../../store/reducer/auth';
 import MainLoader from '../../components/mainLoader';
+import {setInitialLoadingState, setLoading} from '../../store/reducer/loading';
 
 type LoginScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -64,8 +65,9 @@ const Login = ({}) => {
     } catch (err: any) {
       Alert.alert('something is wrong');
     } finally {
+      // dispatch(setInitialLoadingState());
       setTimeout(() => {
-        dispatch(setLoading());
+        dispatch(setInitialLoadingState());
       }, 2000);
     }
   };

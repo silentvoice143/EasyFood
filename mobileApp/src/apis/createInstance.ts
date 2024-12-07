@@ -1,9 +1,15 @@
 import axios from 'axios';
+import {Screen} from 'react-native-screens';
+import {logout} from '../store/reducer/auth';
 
 let injected_store: any;
+let injected_navigation: any;
 
 export const injectStore = (_store: any) => {
   injected_store = _store;
+};
+export const injectNavigate = (_navigate: any) => {
+  injected_navigation = _navigate;
 };
 
 const defaultTimeout = 40000;
@@ -11,7 +17,13 @@ const defaultTimeout = 40000;
 const handleRequest = (config: any) => {
   const accessToken = injected_store.getState().auth.token;
   const noTokenEndPoint = ['/api/auth/login'];
-  const addToken = noTokenEndPoint.includes(config.url);
+  const addToken = !noTokenEndPoint.includes(config.url);
+  // console.log(
+  //   accessToken,
+  //   addToken,
+  //   config.url,
+  //   'token added-------------------',
+  // );
 
   if (addToken) {
     return {
@@ -61,7 +73,9 @@ const handleError = (error: any) => {
         // console.error('Bad Request:', data);
         break;
       case 401:
-        // console.error('Unauthorized:', data);
+        console.error('Unauthorized:', data);
+        injected_store.dispatch(logout());
+        injected_navigation.navigate('vendorRoute', {Screen: 'login'});
         break;
       case 403:
         console.error('Forbidden:', data);

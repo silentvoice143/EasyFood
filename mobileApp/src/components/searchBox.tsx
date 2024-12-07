@@ -17,7 +17,7 @@ const SearchBox = ({onClick}: searchBoxProps) => {
       style={[
         tw`flex-row items-center justify-center bg-[${
           Colors.lightgrayBG
-        }]/30  rounded-full h-12 max-w-[600px] border-[1px] border-[${
+        }]/20  rounded-full h-12 max-w-[600px] border-[1px] border-[${
           isFocus ? Colors.orange : Colors.lightBorder
         }]/75`,
       ]}>

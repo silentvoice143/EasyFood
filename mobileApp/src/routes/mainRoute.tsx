@@ -10,8 +10,9 @@ import {useAppSelector} from '../hooks/reduxHooks';
 import MainLoader from '../components/mainLoader';
 
 const MainRoute = () => {
-  const loading = useAppSelector(state => state.auth.loading);
+  const loading = useAppSelector(state => state.loader.loading);
   const [isLoading, setISLoading] = useState(loading);
+  console.log(isLoading);
 
   const linking = {
     prefixes: ['https://easyfood.com'], // List of URI schemes your app should handle
